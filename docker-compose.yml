@@ -13,12 +13,13 @@ services:
       - app-network
 
   mongo:
-    image: mongo:6.0
+    image: mongo:latest
     container_name: mongo
     ports:
       - "27017:27017"
     volumes:
       - mongo_data:/data/db
+      - ./mongo-init:/docker-entrypoint-initdb.d/
     networks:
       - app-network
 
