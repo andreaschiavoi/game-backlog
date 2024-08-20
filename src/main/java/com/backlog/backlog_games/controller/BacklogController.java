@@ -1,6 +1,6 @@
 package com.backlog.backlog_games.controller;
 
-import com.backlog.backlog_games.models.YourGame;
+import com.backlog.backlog_games.models.MyGames;
 import com.backlog.backlog_games.service.BacklogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,12 +18,12 @@ public class BacklogController {
     private BacklogService service;
 
     @GetMapping("/getAllGames")
-    public List<YourGame> retrieveAllGames() {
+    public List<MyGames> retrieveAllGames() {
         return service.findAllGames();
     }
 
     @PostMapping("/addNewGame")
-    public YourGame addNewGame(YourGame newGame) {
+    public MyGames addNewGame(MyGames newGame) {
         return service.addNewGame(newGame);
     }
 

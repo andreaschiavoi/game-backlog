@@ -1,9 +1,7 @@
 package com.backlog.backlog_games.service;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import com.backlog.backlog_games.TestHelper;
-import com.backlog.backlog_games.models.YourGame;
+import com.backlog.backlog_games.models.MyGames;
 import com.backlog.backlog_games.repository.YourGameRepository;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.data.mongodb.core.aggregation.ArithmeticOperators.Integral;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
@@ -32,10 +29,10 @@ class BacklogServiceIT {
 
   @Test
   public void addNewGameShouldSaveNewEntity() {
-    YourGame game = TestHelper.yourGameTestEntity();
+    MyGames game = TestHelper.yourGameTestEntity();
     when(repository.save(game)).thenReturn(game);
 
-    YourGame saved = service.addNewGame(game);
+    MyGames saved = service.addNewGame(game);
     assertThat(saved).isNotNull();
     assertThat(saved.getGameName()).isEqualTo(game.getGameName());
     assertThat(saved.getRating()).isEqualTo(game.getRating());
@@ -46,14 +43,14 @@ class BacklogServiceIT {
 
   @Test
   public void findAllGamesShouldReturnListOfGames() {
-    YourGame game = TestHelper.yourGameTestEntity();
-    YourGame game2 = TestHelper.yourGameTestEntity2();
+    MyGames game = TestHelper.yourGameTestEntity();
+    MyGames game2 = TestHelper.yourGameTestEntity2();
     when(repository.findAll()).thenReturn(List.of(game, game2));
     List<String> namesExpected = List.of(game.getGameName(), game2.getGameName());
     List<Integer> ratingsExpected = List.of(game.getRating(), game2.getRating());
     List<String> commentsExpected = List.of(game.getComment(), game2.getComment());
 
-    List<YourGame> saved = service.findAllGames();
+    List<MyGames> saved = service.findAllGames();
     List<String> gamesNames = new ArrayList<>();
     List<Integer> gamesRating = new ArrayList<>();
     List<String> gamesComments = new ArrayList<>();

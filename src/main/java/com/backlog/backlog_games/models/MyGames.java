@@ -3,8 +3,8 @@ package com.backlog.backlog_games.models;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collation = "myGames")
-public class YourGame {
+@Document(collection = "myGames")
+public class MyGames {
 
   @Id
   private String id;
@@ -12,9 +12,9 @@ public class YourGame {
   private int rating;
   private String comment;
 
-  public YourGame() {}
+  public MyGames() {}
 
-  public YourGame(String id, String gameName, int rating, String comment) {
+  public MyGames(String id, String gameName, int rating, String comment) {
     this.id = id;
     this.gameName = gameName;
     this.rating = rating;
