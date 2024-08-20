@@ -4,7 +4,7 @@ services:
     ports:
       - "8080:8080"
     environment:
-      SPRING_DATA_MONGODB_URI: mongodb://mongo:27017/mydatabase
+      SPRING_DATA_MONGODB_URI: mongodb://mongo:27017/backlog-games
     depends_on:
       - mongo
       - games-dashboard

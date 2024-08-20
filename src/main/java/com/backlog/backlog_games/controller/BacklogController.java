@@ -3,15 +3,14 @@ package com.backlog.backlog_games.controller;
 import com.backlog.backlog_games.models.MyGames;
 import com.backlog.backlog_games.service.BacklogService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1")
+@CrossOrigin(origins = "http://localhost:3000")
 public class BacklogController {
 
     @Autowired
@@ -23,8 +22,9 @@ public class BacklogController {
     }
 
     @PostMapping("/addNewGame")
-    public MyGames addNewGame(MyGames newGame) {
-        return service.addNewGame(newGame);
+    public ResponseEntity<MyGames> addNewGame(@RequestBody MyGames newGame) {
+        MyGames toSaveGame = service.addNewGame(newGame);
+        return ResponseEntity.ok(toSaveGame);
     }
 
 }
