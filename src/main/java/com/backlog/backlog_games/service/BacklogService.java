@@ -19,4 +19,13 @@ public class BacklogService {
   public List<MyGames> findAllGames() {
     return repository.findAll();
   }
+
+  public boolean removeGameById(String id) {
+    if (repository.existsById(id)) {
+      repository.deleteById(id);
+      return true;
+    } else {
+      return false;
+    }
+  }
 }
