@@ -31,7 +31,7 @@ const GamesTable: React.FC = () => {
   const [games, setGames] = useState<Game[]>([]);
   const [open, setOpen] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState<boolean>(false);
-  const [selectedGame, setSelectedGame] = useState<Partial<Game> | null>(null);
+  const [selectedGame, setSelectedGame] = useState<Partial<Game>>({});
   const [searchTerm, setSearchTerm] = useState<string>("");
 
   useEffect(() => {
@@ -46,7 +46,7 @@ const GamesTable: React.FC = () => {
   }, []);
 
   const handleClickOpen = () => {
-    setSelectedGame(null);
+    setSelectedGame({});
     setIsEditing(false);
     setOpen(true);
   };
@@ -63,9 +63,7 @@ const GamesTable: React.FC = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    if (selectedGame) {
-      setSelectedGame({ ...selectedGame, [name]: value });
-    }
+    setSelectedGame({ ...selectedGame, [name]: value });
   };
 
   const handleSave = () => {
@@ -132,7 +130,7 @@ const GamesTable: React.FC = () => {
             type="text"
             fullWidth
             variant="outlined"
-            value={selectedGame?.gameName || ""}
+            value={selectedGame.gameName || ""}
             onChange={handleChange}
           />
           <TextField
@@ -142,7 +140,7 @@ const GamesTable: React.FC = () => {
             type="number"
             fullWidth
             variant="outlined"
-            value={selectedGame?.rating || ""}
+            value={selectedGame.rating || ""}
             onChange={handleChange}
           />
           <TextField
@@ -152,7 +150,7 @@ const GamesTable: React.FC = () => {
             type="text"
             fullWidth
             variant="outlined"
-            value={selectedGame?.comment || ""}
+            value={selectedGame.comment || ""}
             onChange={handleChange}
           />
         </DialogContent>
