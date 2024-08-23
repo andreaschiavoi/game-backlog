@@ -1,7 +1,7 @@
 package com.backlog.backlog_games.repository;
 
 import com.backlog.backlog_games.TestHelper;
-import com.backlog.backlog_games.models.MyGames;
+import com.backlog.backlog_games.models.MyGame;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,14 +13,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(SpringExtension.class)
 @DataMongoTest
-class MyGamesRepositoryIT {
+class MyGameRepositoryIT {
 
   @Autowired
   private YourGameRepository repository;
 
   @Test
   public void saveEntityShouldSaveNewYourGameEntity() {
-    MyGames saved = repository.save(TestHelper.yourGameTestEntity());
+    MyGame saved = repository.save(TestHelper.yourGameTestEntity());
 
     assertThat(saved.getId()).isNotNull();
     assertThat(saved.getGameName()).isEqualTo("Cyberpunk 2077");

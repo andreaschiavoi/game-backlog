@@ -1,6 +1,6 @@
 package com.backlog.backlog_games.service;
 
-import com.backlog.backlog_games.models.MyGames;
+import com.backlog.backlog_games.models.MyGame;
 import com.backlog.backlog_games.repository.YourGameRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,11 +12,11 @@ public class BacklogService {
   @Autowired
   private YourGameRepository repository;
 
-  public MyGames addNewGame(MyGames myGames) {
-    return repository.save(myGames);
+  public MyGame addNewGame(MyGame myGame) {
+    return repository.save(myGame);
   }
 
-  public List<MyGames> findAllGames() {
+  public List<MyGame> findAllGames() {
     return repository.findAll();
   }
 

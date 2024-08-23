@@ -4,7 +4,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "myGames")
-public class MyGames {
+public class MyGame {
 
   @Id
   private String id;
@@ -12,9 +12,9 @@ public class MyGames {
   private int rating;
   private String comment;
 
-  public MyGames() {}
+  public MyGame() {}
 
-  public MyGames(String id, String gameName, int rating, String comment) {
+  public MyGame(String id, String gameName, int rating, String comment) {
     this.id = id;
     this.gameName = gameName;
     this.rating = rating;
