@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from 'axios';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+import './App.css';
 
 interface Game {
   _id: string;
@@ -50,9 +51,13 @@ const GamesTable: React.FC = () => {
   };
 
   return (
-    <div>
-      <h1>Games Dashboard</h1>
-      <Button variant="contained" color="primary" onClick={handleClickOpen}>
+    <div className="games-container">
+      <section className="games-header">
+        <div className="overlay"></div>
+        <div className="header-wrapper"></div>
+        <div className="h1">Games Dashboard</div>
+      </section>
+      <Button className="btn-cta" onClick={handleClickOpen}>
         Add New Game
       </Button>
       <Dialog open={open} onClose={handleClose}>

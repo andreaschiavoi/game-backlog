@@ -1,6 +1,8 @@
 .App {
   text-align: center;
-  padding: 20px;
+  height: 100vh;
+  background-color: #749159;
+  font-family: "Nunito", sans-serif;
 }
 
 .App-logo {
@@ -33,6 +35,7 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
@@ -44,11 +47,101 @@ table {
   margin: 20px 0;
 }
 
-th, td {
+th,
+td {
   padding: 12px;
   border: 1px solid #ddd;
 }
 
 th {
   background-color: #f4f4f4;
+}
+
+/* Styles Dashboard */
+
+.games-container {
+  display: block;
+  position: relative;
+}
+
+.games-container .header-wrapper {
+  background-image: url("assets/imgs/bg-head.png");
+  background-size: cover;
+  width: 100%;
+  height: 250px;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.games-container .overlay {
+  position: absolute;
+  background: linear-gradient(180deg, transparent 30%, #749159);
+  top: 0;
+  width: 100%;
+  height: 250px;
+}
+
+.games-container .h1 {
+  text-align: center;
+  font-size: 52px;
+  font-weight: 700;
+  color: #222;
+  letter-spacing: 0.2rem;
+  text-transform: uppercase;
+  display: grid;
+  grid-template-columns: 1fr max-content 1fr;
+  grid-gap: 20px;
+  align-items: center;
+  position: relative;
+  padding: 0px 20px;
+}
+
+.games-container .h1::before {
+  content: " ";
+  display: block;
+  border-bottom: 1px solid #222222;
+  border-top: 1px solid #222222;
+  height: 5px;
+}
+
+.games-container .h1::after {
+  content: " ";
+  display: block;
+  border-bottom: 1px solid #222222;
+  border-top: 1px solid #222222;
+  height: 5px;
+}
+
+.games-container .btn-cta {
+  background-color: #fbeee0;
+  border: 2px solid #422800;
+  border-radius: 30px;
+  box-shadow: #422800 4px 4px 0 0;
+  color: #422800;
+  cursor: pointer;
+  display: inline-block;
+  font-weight: 600;
+  font-size: 18px;
+  padding: 0 18px;
+  line-height: 50px;
+  text-align: center;
+  text-decoration: none;
+  user-select: none;
+  margin: 40px 0px;
+}
+
+.games-container .btn-cta:hover {
+  background-color: #422800;
+  color: #fbeee0;
+  box-shadow: none;
+}
+
+
+/* Media queries */
+
+@media screen and (max-width: 768px) {
+  .games-container .h1 {
+    display: block;
+    font-size: 30px;
+  }
 }
