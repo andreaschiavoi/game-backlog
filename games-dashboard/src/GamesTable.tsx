@@ -123,6 +123,13 @@ const GamesTable: React.FC = () => {
     }
   };
 
+  const handleConfirmKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault(); // Prevent the default behavior of Enter key
+      handleDeleteConfirm(); // Call delete confirm function
+    }
+  };
+
   const filteredGames = games.filter((game) =>
     game.gameName.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -188,6 +195,7 @@ const GamesTable: React.FC = () => {
         open={confirmOpen}
         onClose={handleClose}
         aria-labelledby="confirm-dialog-title"
+        onKeyDown={handleConfirmKeyDown}
       >
         <DialogTitle id="confirm-dialog-title">Confirm Delete</DialogTitle>
         <DialogContent>
