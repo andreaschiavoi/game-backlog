@@ -141,9 +141,20 @@ const GamesTable: React.FC = () => {
         <div className="header-wrapper"></div>
         <div className="h1">Games Dashboard</div>
       </section>
-      <Button className="btn-cta" onClick={handleClickOpen}>
-        Add New Game
-      </Button>
+      <section className="games-search-add">
+        <TextField className="search-game"
+          label="Search by Game Name"
+          variant="outlined"
+          margin="normal"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+        <p>or</p>
+        <Button className="btn-cta" onClick={handleClickOpen}>
+          Add New Game
+        </Button>
+      </section>
+
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>{isEditing ? "Edit Game" : "Add New Game"}</DialogTitle>
         <DialogContent>
@@ -211,14 +222,6 @@ const GamesTable: React.FC = () => {
         </DialogActions>
       </Dialog>
       <TableContainer component={Paper}>
-        <TextField
-          label="Search by Game Name"
-          variant="outlined"
-          fullWidth
-          margin="normal"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
         <Table>
           <TableHead>
             <TableRow>

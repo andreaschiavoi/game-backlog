@@ -1,19 +1,142 @@
+/* Reset CSS */
+
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
+}
+
+body {
+  line-height: 1;
+}
+
+ol,
+ul {
+  list-style: none;
+}
+
+blockquote,
+q {
+  quotes: none;
+}
+
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: '';
+  content: none;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* Finished Reset */
+
 .App {
   text-align: center;
   height: 100vh;
   background-color: #749159;
   font-family: "Nunito", sans-serif;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
 }
 
 .App-header {
@@ -25,20 +148,6 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(360deg);
-  }
 }
 
 table {
@@ -85,7 +194,7 @@ th {
   text-align: center;
   font-size: 52px;
   font-weight: 700;
-  color: #222;
+  color: #101010;
   letter-spacing: 0.2rem;
   text-transform: uppercase;
   display: grid;
@@ -136,6 +245,38 @@ th {
   box-shadow: none;
 }
 
+.games-container .games-search-add {
+  align-items: center;
+  padding: 0px 20px;
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+}
+
+.games-container .search-game {
+  max-width: 600px;
+  width: 100%;
+  margin: 0;
+}
+
+.games-container .search-game label,
+.games-container .search-game label+div input {
+  font-family: "Nunito", sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: #101010;
+}
+
+.games-container .search-game label+div {
+  background-color: #fbeee0;
+  border: 1px solid #422800;
+  border-radius: 10px;
+}
+
+.games-container .search-game .MuiOutlinedInput-notchedOutline {
+  border-color: transparent !important;
+  border-width: 0px !important;
+}
 
 /* Media queries */
 
