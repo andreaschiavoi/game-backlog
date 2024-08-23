@@ -32,6 +32,7 @@ const GamesTable: React.FC = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [selectedGame, setSelectedGame] = useState<Partial<Game> | null>(null);
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
   useEffect(() => {
     axios
@@ -106,6 +107,10 @@ const GamesTable: React.FC = () => {
       });
   };
 
+  const filteredGames = games.filter((game) =>
+    game.gameName.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div className="games-container">
       <section className="games-header">
@@ -161,6 +166,14 @@ const GamesTable: React.FC = () => {
         </DialogActions>
       </Dialog>
       <TableContainer component={Paper}>
+        <TextField
+          label="Search by Game Name"
+          variant="outlined"
+          fullWidth
+          margin="normal"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
         <Table>
           <TableHead>
             <TableRow>
@@ -171,7 +184,7 @@ const GamesTable: React.FC = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {games.map((game) => (
+            {filteredGames.map((game) => (
               <TableRow key={game.id}>
                 <TableCell>{game.gameName}</TableCell>
                 <TableCell style={{ width: "104px" }}>{game.rating}</TableCell>
