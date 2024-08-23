@@ -33,6 +33,8 @@ const GamesTable: React.FC = () => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [selectedGame, setSelectedGame] = useState<Partial<Game>>({});
   const [searchTerm, setSearchTerm] = useState<string>("");
+  const [confirmOpen, setConfirmOpen] = useState<boolean>(false);
+  const [gameToDelete, setGameToDelete] = useState<string | null>(null);
 
   useEffect(() => {
     axios
@@ -59,6 +61,7 @@ const GamesTable: React.FC = () => {
 
   const handleClose = () => {
     setOpen(false);
+    setConfirmOpen(false); // Close confirmation dialog if open
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -94,15 +97,30 @@ const GamesTable: React.FC = () => {
     }
   };
 
-  const handleDelete = (id: string) => {
-    axios
-      .delete(`http://localhost:8080/api/v1/deleteGame/${id}`)
-      .then(() => {
-        setGames(games.filter((game) => game.id !== id));
-      })
-      .catch((error) => {
-        console.error("Error during delete game:", error);
-      });
+  const handleDeleteOpen = (id: string) => {
+    setGameToDelete(id);
+    setConfirmOpen(true);
+  };
+
+  const handleDeleteConfirm = () => {
+    if (gameToDelete) {
+      axios
+        .delete(`http://localhost:8080/api/v1/deleteGame/${gameToDelete}`)
+        .then(() => {
+          setGames(games.filter((game) => game.id !== gameToDelete));
+          handleClose(); // Close the confirmation dialog
+        })
+        .catch((error) => {
+          console.error("Error during delete game:", error);
+        });
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault(); // Prevent the default behavior of Enter key
+      handleSave(); // Call save function
+    }
   };
 
   const filteredGames = games.filter((game) =>
@@ -132,6 +150,7 @@ const GamesTable: React.FC = () => {
             variant="outlined"
             value={selectedGame.gameName || ""}
             onChange={handleChange}
+            onKeyDown={handleKeyDown}
           />
           <TextField
             margin="dense"
@@ -142,6 +161,7 @@ const GamesTable: React.FC = () => {
             variant="outlined"
             value={selectedGame.rating || ""}
             onChange={handleChange}
+            onKeyDown={handleKeyDown}
           />
           <TextField
             margin="dense"
@@ -152,6 +172,7 @@ const GamesTable: React.FC = () => {
             variant="outlined"
             value={selectedGame.comment || ""}
             onChange={handleChange}
+            onKeyDown={handleKeyDown}
           />
         </DialogContent>
         <DialogActions>
@@ -160,6 +181,24 @@ const GamesTable: React.FC = () => {
           </Button>
           <Button onClick={handleSave} color="primary">
             {isEditing ? "Update" : "Save"}
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog
+        open={confirmOpen}
+        onClose={handleClose}
+        aria-labelledby="confirm-dialog-title"
+      >
+        <DialogTitle id="confirm-dialog-title">Confirm Delete</DialogTitle>
+        <DialogContent>
+          Are you sure you want to delete this game?
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleDeleteConfirm} color="secondary">
+            Delete
           </Button>
         </DialogActions>
       </Dialog>
@@ -196,7 +235,7 @@ const GamesTable: React.FC = () => {
                   </IconButton>
                   <IconButton
                     color="secondary"
-                    onClick={() => handleDelete(game.id)}
+                    onClick={() => handleDeleteOpen(game.id)}
                   >
                     <DeleteIcon />
                   </IconButton>
