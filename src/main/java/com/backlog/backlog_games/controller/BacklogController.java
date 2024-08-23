@@ -1,8 +1,10 @@
 package com.backlog.backlog_games.controller;
 
+import com.backlog.backlog_games.exceptions.GameNotFoundException;
 import com.backlog.backlog_games.models.MyGame;
 import com.backlog.backlog_games.service.BacklogService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,6 +36,16 @@ public class BacklogController {
             return ResponseEntity.notFound().build();
         } else {
             return ResponseEntity.noContent().build();
+        }
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<MyGame> updateGame(@RequestBody MyGame updatedGame) {
+        try {
+            MyGame updated = service.editGame(updatedGame);
+            return ResponseEntity.ok(updated);
+        } catch (GameNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
 }
