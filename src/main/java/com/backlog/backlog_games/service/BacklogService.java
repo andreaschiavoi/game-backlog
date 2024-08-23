@@ -19,7 +19,7 @@ public class BacklogService {
   }
 
   public List<MyGame> findAllGames() {
-    return repository.findAll();
+    return repository.findByOrderByGameNameAsc();
   }
 
   public boolean removeGameById(String id) {
