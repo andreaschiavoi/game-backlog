@@ -1,8 +1,24 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton } from '@mui/material';
-import './App.css';
+import EditIcon from "@mui/icons-material/Edit";
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  TextField,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  IconButton,
+} from "@mui/material";
+import "./App.css";
 
 interface Game {
   id: string;
@@ -14,11 +30,8 @@ interface Game {
 const GamesTable: React.FC = () => {
   const [games, setGames] = useState<Game[]>([]);
   const [open, setOpen] = useState<boolean>(false);
-  const [newGame, setNewGame] = useState<Partial<Game>>({
-    gameName: "",
-    rating: 0,
-    comment: "",
-  });
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [selectedGame, setSelectedGame] = useState<Partial<Game> | null>(null);
 
   useEffect(() => {
     axios
@@ -32,6 +45,14 @@ const GamesTable: React.FC = () => {
   }, []);
 
   const handleClickOpen = () => {
+    setSelectedGame(null);
+    setIsEditing(false);
+    setOpen(true);
+  };
+
+  const handleEditOpen = (game: Game) => {
+    setSelectedGame(game);
+    setIsEditing(true);
     setOpen(true);
   };
 
@@ -41,25 +62,40 @@ const GamesTable: React.FC = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setNewGame({ ...newGame, [name]: value });
+    if (selectedGame) {
+      setSelectedGame({ ...selectedGame, [name]: value });
+    }
   };
 
   const handleSave = () => {
-    axios
-      .post("http://localhost:8080/api/v1/addNewGame", newGame)
-      .then((response) => {
-        setGames([...games, response.data]);
-        setNewGame({ gameName: "", rating: 0, comment: "" });
-        handleClose();
-      })
-      .catch((error) => {
-        console.error("Error during add new game:", error);
-      });
+    if (isEditing && selectedGame?.id) {
+      axios
+        .put("http://localhost:8080/api/v1/update", selectedGame)
+        .then((response) => {
+          setGames(
+            games.map((game) =>
+              game.id === selectedGame.id ? response.data : game
+            )
+          );
+          handleClose();
+        })
+        .catch((error) => {
+          console.error("Error during update game:", error);
+        });
+    } else {
+      axios
+        .post("http://localhost:8080/api/v1/addNewGame", selectedGame)
+        .then((response) => {
+          setGames([...games, response.data]);
+          handleClose();
+        })
+        .catch((error) => {
+          console.error("Error during add new game:", error);
+        });
+    }
   };
 
   const handleDelete = (id: string) => {
-    console.log("Deleting game with ID:", id); // Per debug
-
     axios
       .delete(`http://localhost:8080/api/v1/deleteGame/${id}`)
       .then(() => {
@@ -81,7 +117,7 @@ const GamesTable: React.FC = () => {
         Add New Game
       </Button>
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Add New Game</DialogTitle>
+        <DialogTitle>{isEditing ? "Edit Game" : "Add New Game"}</DialogTitle>
         <DialogContent>
           <TextField
             autoFocus
@@ -91,7 +127,7 @@ const GamesTable: React.FC = () => {
             type="text"
             fullWidth
             variant="outlined"
-            value={newGame.gameName || ""}
+            value={selectedGame?.gameName || ""}
             onChange={handleChange}
           />
           <TextField
@@ -101,7 +137,7 @@ const GamesTable: React.FC = () => {
             type="number"
             fullWidth
             variant="outlined"
-            value={newGame.rating || ""}
+            value={selectedGame?.rating || ""}
             onChange={handleChange}
           />
           <TextField
@@ -111,7 +147,7 @@ const GamesTable: React.FC = () => {
             type="text"
             fullWidth
             variant="outlined"
-            value={newGame.comment || ""}
+            value={selectedGame?.comment || ""}
             onChange={handleChange}
           />
         </DialogContent>
@@ -120,7 +156,7 @@ const GamesTable: React.FC = () => {
             Cancel
           </Button>
           <Button onClick={handleSave} color="primary">
-            Save
+            {isEditing ? "Update" : "Save"}
           </Button>
         </DialogActions>
       </Dialog>
@@ -131,19 +167,25 @@ const GamesTable: React.FC = () => {
               <TableCell>Game Name</TableCell>
               <TableCell>Rating</TableCell>
               <TableCell>Comment</TableCell>
-              <TableCell></TableCell> {/* Colonna vuota per l'icona */}
+              <TableCell></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {games.map((game) => (
               <TableRow key={game.id}>
                 <TableCell>{game.gameName}</TableCell>
-                <TableCell>{game.rating}</TableCell>
+                <TableCell style={{ width: "104px" }}>{game.rating}</TableCell>
                 <TableCell>{game.comment}</TableCell>
-                <TableCell style={{ width: "56px" }}>
+                <TableCell style={{ width: "112px" }}>
+                  <IconButton
+                    color="primary"
+                    onClick={() => handleEditOpen(game)}
+                  >
+                    <EditIcon />
+                  </IconButton>
                   <IconButton
                     color="secondary"
-                    onClick={() => handleDelete(game.id)} // Funzione anonima per passare l'ID
+                    onClick={() => handleDelete(game.id)}
                   >
                     <DeleteIcon />
                   </IconButton>
