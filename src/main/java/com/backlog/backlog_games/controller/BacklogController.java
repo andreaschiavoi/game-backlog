@@ -27,4 +27,13 @@ public class BacklogController {
         return ResponseEntity.ok(toSaveGame);
     }
 
+    @DeleteMapping("/deleteGame/{id}")
+    public ResponseEntity<Void> deleteGame(@PathVariable String id) {
+        boolean isGameRemoved = service.removeGameById(id);
+        if (!isGameRemoved) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.noContent().build();
+        }
+    }
 }

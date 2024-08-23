@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import axios from 'axios';
+import axios from "axios";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import './App.css';
 
 interface Game {
-  _id: string;
+  id: string;
   gameName: string;
   rating: number;
   comment: string;
@@ -13,15 +14,20 @@ interface Game {
 const GamesTable: React.FC = () => {
   const [games, setGames] = useState<Game[]>([]);
   const [open, setOpen] = useState<boolean>(false);
-  const [newGame, setNewGame] = useState<Partial<Game>>({ gameName: '', rating: 0, comment: '' });
+  const [newGame, setNewGame] = useState<Partial<Game>>({
+    gameName: "",
+    rating: 0,
+    comment: "",
+  });
 
   useEffect(() => {
-    axios.get('http://localhost:8080/api/v1/getAllGames')
-      .then(response => {
+    axios
+      .get("http://localhost:8080/api/v1/getAllGames")
+      .then((response) => {
         setGames(response.data);
       })
-      .catch(error => {
-        console.error('Error during data retrieval:', error);
+      .catch((error) => {
+        console.error("Error during data retrieval:", error);
       });
   }, []);
 
@@ -39,14 +45,28 @@ const GamesTable: React.FC = () => {
   };
 
   const handleSave = () => {
-    axios.post('http://localhost:8080/api/v1/addNewGame', newGame)
-      .then(response => {
+    axios
+      .post("http://localhost:8080/api/v1/addNewGame", newGame)
+      .then((response) => {
         setGames([...games, response.data]);
-        setNewGame({ gameName: '', rating: 0, comment: '' });
+        setNewGame({ gameName: "", rating: 0, comment: "" });
         handleClose();
       })
-      .catch(error => {
-        console.error('Error during add new game:', error);
+      .catch((error) => {
+        console.error("Error during add new game:", error);
+      });
+  };
+
+  const handleDelete = (id: string) => {
+    console.log("Deleting game with ID:", id); // Per debug
+
+    axios
+      .delete(`http://localhost:8080/api/v1/deleteGame/${id}`)
+      .then(() => {
+        setGames(games.filter((game) => game.id !== id));
+      })
+      .catch((error) => {
+        console.error("Error during delete game:", error);
       });
   };
 
@@ -71,7 +91,7 @@ const GamesTable: React.FC = () => {
             type="text"
             fullWidth
             variant="outlined"
-            value={newGame.gameName || ''}
+            value={newGame.gameName || ""}
             onChange={handleChange}
           />
           <TextField
@@ -81,7 +101,7 @@ const GamesTable: React.FC = () => {
             type="number"
             fullWidth
             variant="outlined"
-            value={newGame.rating || ''}
+            value={newGame.rating || ""}
             onChange={handleChange}
           />
           <TextField
@@ -91,7 +111,7 @@ const GamesTable: React.FC = () => {
             type="text"
             fullWidth
             variant="outlined"
-            value={newGame.comment || ''}
+            value={newGame.comment || ""}
             onChange={handleChange}
           />
         </DialogContent>
@@ -111,14 +131,23 @@ const GamesTable: React.FC = () => {
               <TableCell>Game Name</TableCell>
               <TableCell>Rating</TableCell>
               <TableCell>Comment</TableCell>
+              <TableCell></TableCell> {/* Colonna vuota per l'icona */}
             </TableRow>
           </TableHead>
           <TableBody>
-            {games.map(game => (
-              <TableRow key={game._id}>
+            {games.map((game) => (
+              <TableRow key={game.id}>
                 <TableCell>{game.gameName}</TableCell>
                 <TableCell>{game.rating}</TableCell>
                 <TableCell>{game.comment}</TableCell>
+                <TableCell style={{ width: "56px" }}>
+                  <IconButton
+                    color="secondary"
+                    onClick={() => handleDelete(game.id)} // Funzione anonima per passare l'ID
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
