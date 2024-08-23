@@ -10,14 +10,17 @@ public class MyGame {
   private String id;
   private String gameName;
   private int rating;
+  private long millisecondPlayed;
   private String comment;
+
 
   public MyGame() {}
 
-  public MyGame(String id, String gameName, int rating, String comment) {
+  public MyGame(String id, String gameName, int rating, long millisecondPlayed, String comment) {
     this.id = id;
     this.gameName = gameName;
     this.rating = rating;
+    this.millisecondPlayed = millisecondPlayed;
     this.comment = comment;
   }
 
@@ -51,5 +54,13 @@ public class MyGame {
 
   public void setComment(String comment) {
     this.comment = comment;
+  }
+
+  public long getMillisecondPlayed() {
+    return millisecondPlayed;
+  }
+
+  public void setMillisecondPlayed(long millisecondPlayed) {
+    this.millisecondPlayed = millisecondPlayed;
   }
 }

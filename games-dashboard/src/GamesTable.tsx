@@ -24,6 +24,7 @@ interface Game {
   id: string;
   gameName: string;
   rating: number;
+  millisecondPlayed: number;
   comment: string;
 }
 
@@ -47,6 +48,13 @@ const GamesTable: React.FC = () => {
       });
   }, []);
 
+  const formatMilliseconds = (milliseconds: number): string => {
+    const totalMinutes = Math.floor(milliseconds / 60000);
+    const hours = Math.floor(totalMinutes / 60);
+    const minutes = totalMinutes % 60;
+    return `${hours}h ${minutes}m`;
+  };
+
   const handleClickOpen = () => {
     setSelectedGame({});
     setIsEditing(false);
@@ -66,7 +74,10 @@ const GamesTable: React.FC = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setSelectedGame({ ...selectedGame, [name]: value });
+    setSelectedGame({
+      ...selectedGame,
+      [name]: name === "millisecondPlayed" ? Number(value) : value,
+    });
   };
 
   const handleSave = () => {
@@ -161,6 +172,17 @@ const GamesTable: React.FC = () => {
           />
           <TextField
             margin="dense"
+            name="millisecondPlayed"
+            label="Time Played (ms)"
+            type="number"
+            fullWidth
+            variant="outlined"
+            value={selectedGame.millisecondPlayed || ""}
+            onChange={handleChange}
+            onKeyDown={handleKeyDown}
+          />
+          <TextField
+            margin="dense"
             name="rating"
             label="Rating"
             type="number"
@@ -224,6 +246,7 @@ const GamesTable: React.FC = () => {
             <TableRow>
               <TableCell>Game Name</TableCell>
               <TableCell>Rating</TableCell>
+              <TableCell>Time Played</TableCell>
               <TableCell>Comment</TableCell>
               <TableCell></TableCell>
             </TableRow>
@@ -233,6 +256,9 @@ const GamesTable: React.FC = () => {
               <TableRow key={game.id}>
                 <TableCell>{game.gameName}</TableCell>
                 <TableCell style={{ width: "104px" }}>{game.rating}</TableCell>
+                <TableCell>
+                  {formatMilliseconds(game.millisecondPlayed)}
+                </TableCell>
                 <TableCell>{game.comment}</TableCell>
                 <TableCell style={{ width: "112px" }}>
                   <IconButton

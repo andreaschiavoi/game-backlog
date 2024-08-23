@@ -136,6 +136,26 @@ th {
   box-shadow: none;
 }
 
+.table-cell-game-name {
+  width: 40%;
+}
+
+.table-cell-rating {
+  width: 10%;
+}
+
+.table-cell-comment {
+  width: 20%;
+}
+
+.table-cell-played-time {
+  width: 20%;
+}
+
+.table-cell-actions {
+  width: 10%;
+}
+
 
 /* Media queries */
 

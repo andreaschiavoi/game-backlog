@@ -38,6 +38,7 @@ public class BacklogService {
       gameToBeModified.setGameName(updatedGame.getGameName());
       gameToBeModified.setComment(updatedGame.getComment());
       gameToBeModified.setRating(updatedGame.getRating());
+      gameToBeModified.setMillisecondPlayed(updatedGame.getMillisecondPlayed());
       return repository.save(gameToBeModified);
     } else {
       throw new GameNotFoundException("Game not found");
