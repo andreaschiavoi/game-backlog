@@ -33,6 +33,7 @@ const GamesTable: React.FC = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [selectedGame, setSelectedGame] = useState<Partial<Game>>({});
+  const [timePlayedInput, setTimePlayedInput] = useState<string>("0h 0m");
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [confirmOpen, setConfirmOpen] = useState<boolean>(false);
   const [gameToDelete, setGameToDelete] = useState<string | null>(null);
@@ -55,14 +56,13 @@ const GamesTable: React.FC = () => {
     return `${hours}h ${minutes}m`;
   };
 
-  const convertToMilliseconds = (timeString: String): number => {
+  const convertToMilliseconds = (timeString: string): number => {
     let hours = 0;
     let minutes = 0;
 
     const hoursMatch = timeString.match(/(\d+)h/);
     const minutesMatch = timeString.match(/(\d+)m/);
 
-    // Se esistono, converti in numeri interi
     if (hoursMatch) {
       hours = parseInt(hoursMatch[1], 10);
     }
@@ -70,48 +70,57 @@ const GamesTable: React.FC = () => {
       minutes = parseInt(minutesMatch[1], 10);
     }
 
-    // Converti ore e minuti in millisecondi
     const hoursInMilliseconds = hours * 60 * 60 * 1000;
     const minutesInMilliseconds = minutes * 60 * 1000;
 
-    // Somma i millisecondi totali
     return hoursInMilliseconds + minutesInMilliseconds;
   };
 
   const handleClickOpen = () => {
     setSelectedGame({});
+    setTimePlayedInput("0h 0m");
     setIsEditing(false);
     setOpen(true);
   };
 
   const handleEditOpen = (game: Game) => {
     setSelectedGame(game);
+    setTimePlayedInput(formatMilliseconds(game.millisecondPlayed || 0));
     setIsEditing(true);
     setOpen(true);
   };
 
   const handleClose = () => {
     setOpen(false);
-    setConfirmOpen(false); // Close confirmation dialog if open
+    setConfirmOpen(false);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    const millisecondValue = convertToMilliseconds(value);
-    setSelectedGame({
-      ...selectedGame,
-      [name]: name === "millisecondPlayed" ? Number(millisecondValue) : value,
-    });
+
+    if (name === "millisecondPlayed") {
+      setTimePlayedInput(value);
+    } else {
+      setSelectedGame({
+        ...selectedGame,
+        [name]: value,
+      });
+    }
   };
 
   const handleSave = () => {
-    if (isEditing && selectedGame?.id) {
+    const updatedGame = {
+      ...selectedGame,
+      millisecondPlayed: convertToMilliseconds(timePlayedInput),
+    };
+
+    if (isEditing && updatedGame.id) {
       axios
-        .put("http://localhost:8080/api/v1/update", selectedGame)
+        .put("http://localhost:8080/api/v1/update", updatedGame)
         .then((response) => {
           setGames(
             games.map((game) =>
-              game.id === selectedGame.id ? response.data : game
+              game.id === updatedGame.id ? response.data : game
             )
           );
           handleClose();
@@ -121,7 +130,7 @@ const GamesTable: React.FC = () => {
         });
     } else {
       axios
-        .post("http://localhost:8080/api/v1/addNewGame", selectedGame)
+        .post("http://localhost:8080/api/v1/addNewGame", updatedGame)
         .then((response) => {
           setGames([...games, response.data]);
           handleClose();
@@ -143,7 +152,7 @@ const GamesTable: React.FC = () => {
         .delete(`http://localhost:8080/api/v1/deleteGame/${gameToDelete}`)
         .then(() => {
           setGames(games.filter((game) => game.id !== gameToDelete));
-          handleClose(); // Close the confirmation dialog
+          handleClose();
         })
         .catch((error) => {
           console.error("Error during delete game:", error);
@@ -153,15 +162,15 @@ const GamesTable: React.FC = () => {
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (e.key === "Enter") {
-      e.preventDefault(); // Prevent the default behavior of Enter key
-      handleSave(); // Call save function
+      e.preventDefault();
+      handleSave();
     }
   };
 
   const handleConfirmKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (e.key === "Enter") {
-      e.preventDefault(); // Prevent the default behavior of Enter key
-      handleDeleteConfirm(); // Call delete confirm function
+      e.preventDefault();
+      handleDeleteConfirm();
     }
   };
 
@@ -197,13 +206,11 @@ const GamesTable: React.FC = () => {
           <TextField
             margin="dense"
             name="millisecondPlayed"
-            label="Time Played (ms)"
+            label="Time Played (e.g., 2h 30m)"
             type="string"
             fullWidth
             variant="outlined"
-            value={
-              formatMilliseconds(selectedGame.millisecondPlayed || 0) || String
-            }
+            value={timePlayedInput}
             onChange={handleChange}
             onKeyDown={handleKeyDown}
           />
