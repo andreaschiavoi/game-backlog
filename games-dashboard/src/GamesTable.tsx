@@ -55,6 +55,29 @@ const GamesTable: React.FC = () => {
     return `${hours}h ${minutes}m`;
   };
 
+  const convertToMilliseconds = (timeString: String): number => {
+    let hours = 0;
+    let minutes = 0;
+
+    const hoursMatch = timeString.match(/(\d+)h/);
+    const minutesMatch = timeString.match(/(\d+)m/);
+
+    // Se esistono, converti in numeri interi
+    if (hoursMatch) {
+      hours = parseInt(hoursMatch[1], 10);
+    }
+    if (minutesMatch) {
+      minutes = parseInt(minutesMatch[1], 10);
+    }
+
+    // Converti ore e minuti in millisecondi
+    const hoursInMilliseconds = hours * 60 * 60 * 1000;
+    const minutesInMilliseconds = minutes * 60 * 1000;
+
+    // Somma i millisecondi totali
+    return hoursInMilliseconds + minutesInMilliseconds;
+  };
+
   const handleClickOpen = () => {
     setSelectedGame({});
     setIsEditing(false);
@@ -74,9 +97,10 @@ const GamesTable: React.FC = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+    const millisecondValue = convertToMilliseconds(value);
     setSelectedGame({
       ...selectedGame,
-      [name]: name === "millisecondPlayed" ? Number(value) : value,
+      [name]: name === "millisecondPlayed" ? Number(millisecondValue) : value,
     });
   };
 
@@ -174,10 +198,12 @@ const GamesTable: React.FC = () => {
             margin="dense"
             name="millisecondPlayed"
             label="Time Played (ms)"
-            type="number"
+            type="string"
             fullWidth
             variant="outlined"
-            value={selectedGame.millisecondPlayed || ""}
+            value={
+              formatMilliseconds(selectedGame.millisecondPlayed || 0) || String
+            }
             onChange={handleChange}
             onKeyDown={handleKeyDown}
           />
