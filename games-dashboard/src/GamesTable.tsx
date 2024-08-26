@@ -154,108 +154,111 @@ const GamesTable: React.FC = () => {
           Add New Game
         </Button>
       </section>
-
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>{isEditing ? "Edit Game" : "Add New Game"}</DialogTitle>
-        <DialogContent>
-          <TextField
-            autoFocus
-            margin="dense"
-            name="gameName"
-            label="Game Name"
-            type="text"
-            fullWidth
-            variant="outlined"
-            value={selectedGame.gameName || ""}
-            onChange={handleChange}
-            onKeyDown={handleKeyDown}
-          />
-          <TextField
-            margin="dense"
-            name="rating"
-            label="Rating"
-            type="number"
-            fullWidth
-            variant="outlined"
-            value={selectedGame.rating || ""}
-            onChange={handleChange}
-            onKeyDown={handleKeyDown}
-          />
-          <TextField
-            margin="dense"
-            name="comment"
-            label="Comment"
-            type="text"
-            fullWidth
-            variant="outlined"
-            value={selectedGame.comment || ""}
-            onChange={handleChange}
-            onKeyDown={handleKeyDown}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={handleSave} color="primary">
-            {isEditing ? "Update" : "Save"}
-          </Button>
-        </DialogActions>
-      </Dialog>
-      <Dialog
-        open={confirmOpen}
-        onClose={handleClose}
-        aria-labelledby="confirm-dialog-title"
-        onKeyDown={handleConfirmKeyDown}
-      >
-        <DialogTitle id="confirm-dialog-title">Confirm Delete</DialogTitle>
-        <DialogContent>
-          Are you sure you want to delete this game?
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={handleDeleteConfirm} color="secondary">
-            Delete
-          </Button>
-        </DialogActions>
-      </Dialog>
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Game Name</TableCell>
-              <TableCell>Rating</TableCell>
-              <TableCell>Comment</TableCell>
-              <TableCell></TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {filteredGames.map((game) => (
-              <TableRow key={game.id}>
-                <TableCell>{game.gameName}</TableCell>
-                <TableCell style={{ width: "104px" }}>{game.rating}</TableCell>
-                <TableCell>{game.comment}</TableCell>
-                <TableCell style={{ width: "112px" }}>
-                  <IconButton
-                    color="primary"
-                    onClick={() => handleEditOpen(game)}
-                  >
-                    <EditIcon />
-                  </IconButton>
-                  <IconButton
-                    color="secondary"
-                    onClick={() => handleDeleteOpen(game.id)}
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                </TableCell>
+      <section className="games-table">
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Game Name</TableCell>
+                <TableCell>Rating</TableCell>
+                <TableCell>Comment</TableCell>
+                <TableCell></TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </TableHead>
+            <TableBody>
+              {filteredGames.map((game) => (
+                <TableRow key={game.id}>
+                  <TableCell>{game.gameName}</TableCell>
+                  <TableCell style={{ width: "104px" }}>{game.rating}</TableCell>
+                  <TableCell>{game.comment}</TableCell>
+                  <TableCell style={{ width: "112px" }}>
+                    <IconButton
+                      color="primary"
+                      onClick={() => handleEditOpen(game)}
+                    >
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton
+                      color="secondary"
+                      onClick={() => handleDeleteOpen(game.id)}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </section>
+      <section className="game-modal">
+        <Dialog open={open} onClose={handleClose}>
+          <DialogTitle>{isEditing ? "Edit Game" : "Add New Game"}</DialogTitle>
+          <DialogContent>
+            <TextField
+              autoFocus
+              margin="dense"
+              name="gameName"
+              label="Game Name"
+              type="text"
+              fullWidth
+              variant="outlined"
+              value={selectedGame.gameName || ""}
+              onChange={handleChange}
+              onKeyDown={handleKeyDown}
+            />
+            <TextField
+              margin="dense"
+              name="rating"
+              label="Rating"
+              type="number"
+              fullWidth
+              variant="outlined"
+              value={selectedGame.rating || ""}
+              onChange={handleChange}
+              onKeyDown={handleKeyDown}
+            />
+            <TextField
+              margin="dense"
+              name="comment"
+              label="Comment"
+              type="text"
+              fullWidth
+              variant="outlined"
+              value={selectedGame.comment || ""}
+              onChange={handleChange}
+              onKeyDown={handleKeyDown}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose} color="primary">
+              Cancel
+            </Button>
+            <Button onClick={handleSave} color="primary">
+              {isEditing ? "Update" : "Save"}
+            </Button>
+          </DialogActions>
+        </Dialog>
+        <Dialog
+          open={confirmOpen}
+          onClose={handleClose}
+          aria-labelledby="confirm-dialog-title"
+          onKeyDown={handleConfirmKeyDown}
+        >
+          <DialogTitle id="confirm-dialog-title">Confirm Delete</DialogTitle>
+          <DialogContent>
+            Are you sure you want to delete this game?
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose} color="primary">
+              Cancel
+            </Button>
+            <Button onClick={handleDeleteConfirm} color="secondary">
+              Delete
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </section>
     </div>
   );
 };
