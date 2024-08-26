@@ -166,7 +166,7 @@ const GamesTable: React.FC = () => {
   };
 
   const filteredGames = games.filter((game) =>
-    game.gameName.toLowerCase().includes(searchTerm.toLowerCase())
+    game.gameName?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
