@@ -185,133 +185,140 @@ const GamesTable: React.FC = () => {
         <div className="header-wrapper"></div>
         <div className="h1">Games Dashboard</div>
       </section>
-      <Button className="btn-cta" onClick={handleClickOpen}>
-        Add New Game
-      </Button>
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>{isEditing ? "Edit Game" : "Add New Game"}</DialogTitle>
-        <DialogContent>
-          <TextField
-            autoFocus
-            margin="dense"
-            name="gameName"
-            label="Game Name"
-            type="text"
-            fullWidth
+      <section className="games-search-add">
+        <TextField className="search-game"
+            label="Search by Game Name"
             variant="outlined"
-            value={selectedGame.gameName || ""}
-            onChange={handleChange}
-            onKeyDown={handleKeyDown}
-          />
-          <TextField
-            margin="dense"
-            name="millisecondPlayed"
-            label="Time Played (e.g., 2h 30m)"
-            type="string"
             fullWidth
-            variant="outlined"
-            value={timePlayedInput}
-            onChange={handleChange}
-            onKeyDown={handleKeyDown}
+            margin="normal"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <TextField
-            margin="dense"
-            name="rating"
-            label="Rating"
-            type="number"
-            fullWidth
-            variant="outlined"
-            value={selectedGame.rating || ""}
-            onChange={handleChange}
-            onKeyDown={handleKeyDown}
-          />
-          <TextField
-            margin="dense"
-            name="comment"
-            label="Comment"
-            type="text"
-            fullWidth
-            variant="outlined"
-            value={selectedGame.comment || ""}
-            onChange={handleChange}
-            onKeyDown={handleKeyDown}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={handleSave} color="primary">
-            {isEditing ? "Update" : "Save"}
-          </Button>
-        </DialogActions>
-      </Dialog>
-      <Dialog
-        open={confirmOpen}
-        onClose={handleClose}
-        aria-labelledby="confirm-dialog-title"
-        onKeyDown={handleConfirmKeyDown}
-      >
-        <DialogTitle id="confirm-dialog-title">Confirm Delete</DialogTitle>
-        <DialogContent>
-          Are you sure you want to delete this game?
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={handleDeleteConfirm} color="secondary">
-            Delete
-          </Button>
-        </DialogActions>
-      </Dialog>
-      <TableContainer component={Paper}>
-        <TextField
-          label="Search by Game Name"
-          variant="outlined"
-          fullWidth
-          margin="normal"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Game Name</TableCell>
-              <TableCell>Rating</TableCell>
-              <TableCell>Time Played</TableCell>
-              <TableCell>Comment</TableCell>
-              <TableCell></TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {filteredGames.map((game) => (
-              <TableRow key={game.id}>
-                <TableCell>{game.gameName}</TableCell>
-                <TableCell style={{ width: "104px" }}>{game.rating}</TableCell>
-                <TableCell>
-                  {formatMilliseconds(game.millisecondPlayed)}
-                </TableCell>
-                <TableCell>{game.comment}</TableCell>
-                <TableCell style={{ width: "112px" }}>
-                  <IconButton
-                    color="primary"
-                    onClick={() => handleEditOpen(game)}
-                  >
-                    <EditIcon />
-                  </IconButton>
-                  <IconButton
-                    color="secondary"
-                    onClick={() => handleDeleteOpen(game.id)}
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                </TableCell>
+          <p>OR</p>
+        <Button className="btn-cta" onClick={handleClickOpen}>
+          Add New Game
+        </Button>
+      </section>
+      <section className="games-table">
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Game Name</TableCell>
+                <TableCell>Rating</TableCell>
+                <TableCell>Time Played</TableCell>
+                <TableCell>Comment</TableCell>
+                <TableCell></TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </TableHead>
+            <TableBody>
+              {filteredGames.map((game) => (
+                <TableRow key={game.id}>
+                  <TableCell>{game.gameName}</TableCell>
+                  <TableCell style={{ width: "104px" }}>{game.rating}</TableCell>
+                  <TableCell>
+                    {formatMilliseconds(game.millisecondPlayed)}
+                  </TableCell>
+                  <TableCell>{game.comment}</TableCell>
+                  <TableCell style={{ width: "112px" }}>
+                    <IconButton
+                      color="primary"
+                      onClick={() => handleEditOpen(game)}
+                    >
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton
+                      color="secondary"
+                      onClick={() => handleDeleteOpen(game.id)}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </section>
+      <section className="games-modals">
+        <Dialog open={open} onClose={handleClose}>
+          <DialogTitle>{isEditing ? "Edit Game" : "Add New Game"}</DialogTitle>
+          <DialogContent>
+            <TextField
+              autoFocus
+              margin="dense"
+              name="gameName"
+              label="Game Name"
+              type="text"
+              fullWidth
+              variant="outlined"
+              value={selectedGame.gameName || ""}
+              onChange={handleChange}
+              onKeyDown={handleKeyDown}
+            />
+            <TextField
+              margin="dense"
+              name="millisecondPlayed"
+              label="Time Played (e.g., 2h 30m)"
+              type="string"
+              fullWidth
+              variant="outlined"
+              value={timePlayedInput}
+              onChange={handleChange}
+              onKeyDown={handleKeyDown}
+            />
+            <TextField
+              margin="dense"
+              name="rating"
+              label="Rating"
+              type="number"
+              fullWidth
+              variant="outlined"
+              value={selectedGame.rating || ""}
+              onChange={handleChange}
+              onKeyDown={handleKeyDown}
+            />
+            <TextField
+              margin="dense"
+              name="comment"
+              label="Comment"
+              type="text"
+              fullWidth
+              variant="outlined"
+              value={selectedGame.comment || ""}
+              onChange={handleChange}
+              onKeyDown={handleKeyDown}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose} color="primary">
+              Cancel
+            </Button>
+            <Button onClick={handleSave} color="primary">
+              {isEditing ? "Update" : "Save"}
+            </Button>
+          </DialogActions>
+        </Dialog>
+        <Dialog
+          open={confirmOpen}
+          onClose={handleClose}
+          aria-labelledby="confirm-dialog-title"
+          onKeyDown={handleConfirmKeyDown}
+        >
+          <DialogTitle id="confirm-dialog-title">Confirm Delete</DialogTitle>
+          <DialogContent>
+            Are you sure you want to delete this game?
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose} color="primary">
+              Cancel
+            </Button>
+            <Button onClick={handleDeleteConfirm} color="secondary">
+              Delete
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </section>
     </div>
   );
 };
