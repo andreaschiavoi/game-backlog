@@ -3,6 +3,7 @@ package com.backlog.backlog_games.controller;
 import com.backlog.backlog_games.exceptions.GameNotFoundException;
 import com.backlog.backlog_games.models.MyGame;
 import com.backlog.backlog_games.service.BacklogService;
+import com.backlog.backlog_games.steam.SteamLibraryExporter;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Objects;
@@ -58,6 +59,12 @@ public class BacklogController {
     } catch (GameNotFoundException e) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
     }
+  }
+
+  @PostMapping("/importSteamLibrary")
+  public ResponseEntity<List<MyGame>> importSteamLibrary() {
+    List<MyGame> myGames = SteamLibraryExporter.retrieveSteamLibrary(service);
+    return ResponseEntity.ok(myGames);
   }
 
   @ExceptionHandler(MethodArgumentNotValidException.class)

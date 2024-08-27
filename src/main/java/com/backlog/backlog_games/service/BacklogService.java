@@ -18,6 +18,14 @@ public class BacklogService {
     return repository.save(myGame);
   }
 
+  public MyGame addNewGame(String gameName, long millisecondPlayed) {
+    MyGame newGame = new MyGame();
+    newGame.setGameName(gameName);
+    newGame.setMillisecondPlayed(millisecondPlayed);
+
+    return repository.save(newGame);
+  }
+
   public List<MyGame> findAllGames() {
     return repository.findByOrderByGameNameAsc();
   }

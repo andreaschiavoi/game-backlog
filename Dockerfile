@@ -25,4 +25,7 @@ COPY --from=build /app/target/*.jar app.jar
 EXPOSE 8080
 
 # Comando di avvio
-CMD ["java", "-jar", "app.jar"]
+#CMD ["java", "-jar", "app.jar"]
+#Debug
+CMD ["java", "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005", "-jar", "app.jar"]
+
