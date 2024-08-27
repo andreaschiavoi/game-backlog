@@ -1,5 +1,6 @@
 package com.backlog.backlog_games.models;
 
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -8,6 +9,7 @@ public class MyGame {
 
   @Id
   private String id;
+  @NotBlank(message = "Game name must not be blank")
   private String gameName;
   private int rating;
   private long millisecondPlayed;
