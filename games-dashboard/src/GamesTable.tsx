@@ -37,6 +37,7 @@ const GamesTable: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [confirmOpen, setConfirmOpen] = useState<boolean>(false);
   const [gameToDelete, setGameToDelete] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     axios
@@ -80,6 +81,7 @@ const GamesTable: React.FC = () => {
     setSelectedGame({});
     setTimePlayedInput("0h 0m");
     setIsEditing(false);
+    setError(null);
     setOpen(true);
   };
 
@@ -87,6 +89,7 @@ const GamesTable: React.FC = () => {
     setSelectedGame(game);
     setTimePlayedInput(formatMilliseconds(game.millisecondPlayed || 0));
     setIsEditing(true);
+    setError(null);
     setOpen(true);
   };
 
@@ -126,7 +129,11 @@ const GamesTable: React.FC = () => {
           handleClose();
         })
         .catch((error) => {
-          console.error("Error during update game:", error);
+          if (error.response && error.response.status === 400) {
+            setError(error.response.data);
+          } else {
+            console.error("Error during update game:", error);
+          }
         });
     } else {
       axios
@@ -136,7 +143,11 @@ const GamesTable: React.FC = () => {
           handleClose();
         })
         .catch((error) => {
-          console.error("Error during add new game:", error);
+          if (error.response && error.response.status === 400) {
+            setError(error.response.data);
+          } else {
+            console.error("Error during add new game:", error);
+          }
         });
     }
   };
@@ -186,15 +197,16 @@ const GamesTable: React.FC = () => {
         <div className="h1">Games Dashboard</div>
       </section>
       <section className="games-search-add">
-        <TextField className="search-game"
-            label="Search by Game Name"
-            variant="outlined"
-            fullWidth
-            margin="normal"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          <p>OR</p>
+        <TextField
+          className="search-game"
+          label="Search by Game Name"
+          variant="outlined"
+          fullWidth
+          margin="normal"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+        <p>OR</p>
         <Button className="btn-cta" onClick={handleClickOpen}>
           Add New Game
         </Button>
@@ -215,7 +227,9 @@ const GamesTable: React.FC = () => {
               {filteredGames.map((game) => (
                 <TableRow key={game.id}>
                   <TableCell>{game.gameName}</TableCell>
-                  <TableCell style={{ width: "104px" }}>{game.rating}</TableCell>
+                  <TableCell style={{ width: "104px" }}>
+                    {game.rating}
+                  </TableCell>
                   <TableCell>
                     {formatMilliseconds(game.millisecondPlayed)}
                   </TableCell>
@@ -244,6 +258,7 @@ const GamesTable: React.FC = () => {
         <Dialog open={open} onClose={handleClose}>
           <DialogTitle>{isEditing ? "Edit Game" : "Add New Game"}</DialogTitle>
           <DialogContent>
+            {error && <p style={{ color: "red" }}>{error}</p>}
             <TextField
               autoFocus
               margin="dense"
@@ -255,6 +270,8 @@ const GamesTable: React.FC = () => {
               value={selectedGame.gameName || ""}
               onChange={handleChange}
               onKeyDown={handleKeyDown}
+              error={!!error && selectedGame.gameName === ""}
+              helperText={!!error && selectedGame.gameName === "" ? error : ""}
             />
             <TextField
               margin="dense"
